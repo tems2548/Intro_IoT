@@ -1,0 +1,23 @@
+#define pin_start 8
+#define pin_end 13
+
+void setup() {
+  for(int i = pin_start;i <= pin_end;i++){
+    pinMode(i,OUTPUT);
+  }
+  Serial.begin(9600);
+}
+
+void loop() {
+  for(int j = pin_start;j <= pin_end ;j++){
+    digitalWrite(j,1);
+    delay(100);
+    digitalWrite(j,0);
+  }
+
+    for(int j = pin_end;j >= pin_start ;j--){
+    digitalWrite(j,1);
+    delay(100);
+    digitalWrite(j,0);
+  }
+}
