@@ -8,7 +8,7 @@ int segmentF = 7;
 int segmentG = 8;
 int segmentDP = 13;
 
-int avg[10];
+int avg[50];
 int bt = 12;
 int num;
 int a = 1;
@@ -230,13 +230,16 @@ float T0 = 25.00+273.15; //T เร่ิม
 float ln = log(R_thermistor/R0);
 temperature = (1.00/((1.00/T0) + (ln/Const_B)));
 C_temp = temperature-273;
+
+
 for(int i = 0; i < sizeof(avg)/sizeof(int);i++){
   avg[i] = C_temp;
+
 }
 for(int num = 0; num < sizeof(avg)/sizeof(int);num++){
   avg_temp += avg[num];
 }
-avg_temp = avg_temp/10;
+avg_temp = avg_temp/50;
 }
 void loop() {
   float voltage_val = analogRead(A0)*(5.0/1023);
