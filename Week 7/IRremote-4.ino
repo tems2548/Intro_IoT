@@ -1,8 +1,11 @@
 #include <IRremote.h>
+#include "ArduinoGraphics.h"
+#include "Arduino_LED_Matrix.h"
 #define RECV 12
 
 IRrecv irrecv(RECV);
 decode_results results;
+ArduinoLEDMatrix matrix;
 
 int segmentA = 11;
 int segmentB = A1;
@@ -14,11 +17,11 @@ int segmentG = 8;
 int segmentDP = 13;
 
 int avg[50];
+
 int bt = 12;
 int num;
 int a = 1;
 int wait_val;
-
 int dim;
 int active_d1 = 5;
 int active_d2 = 6;
@@ -144,27 +147,6 @@ void dis_num(int digit1,int digit2,int digit3,int digit4,int act_dp = 0,int dp_d
     }
 }
 
-void setup() {
-  Serial.begin(9600);
-  irrecv.enableIRIn(); // Start the receiver
-  // irrecv.blink13(true);
-
-
-  pinMode(segmentA,OUTPUT);
-  pinMode(segmentB,OUTPUT);
-  pinMode(segmentC,OUTPUT);
-  pinMode(segmentD,OUTPUT);
-  pinMode(segmentE,OUTPUT);
-  pinMode(segmentF,OUTPUT);
-  pinMode(segmentG,OUTPUT);
-  pinMode(segmentDP,OUTPUT);
-  pinMode(active_d1,OUTPUT);
-  pinMode(active_d2,OUTPUT);
-  pinMode(active_d3,OUTPUT);
-  pinMode(active_d4,OUTPUT);
-  pinMode(bt,INPUT_PULLUP);
-  Serial.begin(9600);
-}
 void ID_num(int delay_display ,int n1,int n2,int n3,int n4,int n5,int n6,int n7,int n8){
   for(int count = 0;count <= delay_display;count++){
     dis_num(10,10,10,n1);
@@ -292,17 +274,82 @@ case 0xFFFFFFFF: Serial.println("REPEAT ");break;
 // default: Serial.print("other button ");
 }
 }
-
+void mat_(String x){
+  matrix.stroke(0xFFFFFFFF);
+  matrix.textFont(Font_5x7);
+  matrix.beginText(3,1, 0xFFFFFF);
+  matrix.println(x);
+  matrix.endText();
+  matrix.endDraw();
+}
+void Mat_display(int number){
+    switch(number){
+    case 0:
+     mat_("0");  
+    break;
+    case 1:
+     mat_("1");
+     break;
+    case 2:
+     mat_("2");
+     break;
+    case 3:
+     mat_("3");
+     break;
+    case 4:
+    mat_("4");
+    break;
+    case 5:
+     mat_("5");
+    break;
+    case 6:
+     mat_("6");
+    break;
+    case 7:
+     mat_("7");
+    break;
+    case 8:
+     mat_("8");
+    break;
+    case 9:
+     mat_("9");
+    break;  
+      case 10:
+     mat_("*");
+    break;  
+  }
+}
+void setup() {
+  Serial.begin(9600);
+  irrecv.enableIRIn(); // Start the receiver
+  // irrecv.blink13(true);
+  matrix.begin();
+  matrix.beginDraw();
+  matrix.stroke(0xFFFFFFFF);
+  pinMode(segmentA,OUTPUT);
+  pinMode(segmentB,OUTPUT);
+  pinMode(segmentC,OUTPUT);
+  pinMode(segmentD,OUTPUT);
+  pinMode(segmentE,OUTPUT);
+  pinMode(segmentF,OUTPUT);
+  pinMode(segmentG,OUTPUT);
+  pinMode(segmentDP,OUTPUT);
+  pinMode(active_d1,OUTPUT);
+  pinMode(active_d2,OUTPUT);
+  pinMode(active_d3,OUTPUT);
+  pinMode(active_d4,OUTPUT);
+  pinMode(bt,INPUT_PULLUP);
+  Serial.begin(9600);
+}
 void loop() {
 //address 2367613F
 display_integer_value(read_);
-// display_float_value(12.22,2);
+Mat_display(read_);
+
 if (IrReceiver.decode()) // Received IR signal
 {
-// Serial.println(IrReceiver.decodedIRData.decodedRawData, HEX); // Print raw data
 IRsignal(IrReceiver.decodedIRData.decodedRawData);
-IrReceiver.resume(); // Enable receiving of the next value
+IrReceiver.resume(); 
 }
 }
-
 
