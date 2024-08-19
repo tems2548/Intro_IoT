@@ -7,7 +7,7 @@ IRrecv irrecv(RECV);
 decode_results results;
 ArduinoLEDMatrix matrix;
 
-int segmentA = 11;
+int segmentA = A4;
 int segmentB = A1;
 int segmentC = A2;
 int segmentD = 2;
@@ -17,16 +17,18 @@ int segmentG = 8;
 int segmentDP = 13;
 
 int avg[50];
+int HEX_num[8];
 
 int bt = 12;
 int num;
-int a = 1;
+int ir;
 int wait_val;
 int dim;
 int active_d1 = 5;
 int active_d2 = 6;
 int active_d3 = 9;
 int active_d4 = 10;
+int i = 0;
 
 int read_;
 int delay_disp;
@@ -103,11 +105,24 @@ void displaysegment(int digit,int dp = 0){
     case 9:
      segment(1,1,1,1,0,1,1,dp);
     break;  
+    // A B C D E F
     case 10:
-    segment(0,0,0,0,0,0,0,dp);
+    segment(1,1,1,0,1,1,1,dp);
+    break;
     case 11:
+    segment(1,1,1,1,1,1,1,dp);
+    break;
+    case 12:
+    segment(1,0,0,1,1,1,0,dp);
+    break;
+    case 13:
+    segment(1,1,1,1,1,1,0,dp);
+    break;
+    case 14:
+    segment(1,0,0,1,1,1,1,dp);
+    break;
+    case 15:
     segment(1,0,0,0,1,1,1,dp);
-
     break;
   }
 }
@@ -213,6 +228,20 @@ if(millis() - wait >= previous_time){
   int digit_3 = (wait_val % 1000)/100;
   int digit_4 = (wait_val % 10000)/1000;
 
+
+ dis_num(digit_4,digit_3,digit_2,digit_1);
+}
+void display_HEX_value(){
+// 0xB04FFE01
+  int digit_1 = HEX_num[4];
+  int digit_2 = HEX_num[5];
+  int digit_3 = HEX_num[6];
+  int digit_4 = HEX_num[7];
+
+// Serial.print(HEX_num[7],HEX);
+// Serial.print(HEX_num[6],HEX);
+// Serial.print(HEX_num[5],HEX);
+// Serial.print(HEX_num[4],HEX);
 
  dis_num(digit_4,digit_3,digit_2,digit_1);
 }
@@ -343,13 +372,25 @@ void setup() {
 }
 void loop() {
 //address 2367613F
-display_integer_value(read_);
+// display_integer_value(read_);
 Mat_display(read_);
 
 if (IrReceiver.decode()) // Received IR signal
 {
 IRsignal(IrReceiver.decodedIRData.decodedRawData);
+Serial.println("");
 IrReceiver.resume(); 
-}
-}
+ir = IrReceiver.decodedIRData.decodedRawData;
+i = 0;
 
+}
+while(IrReceiver.decodedIRData.decodedRawData > 0){
+  HEX_num[i] = IrReceiver.decodedIRData.decodedRawData % 0x10;
+  IrReceiver.decodedIRData.decodedRawData /= 0x10;
+  i++;
+}
+for(int j = i-1;j>=0;j--){
+  Serial.println(HEX_num[j],HEX);
+}
+display_HEX_value();
+}
