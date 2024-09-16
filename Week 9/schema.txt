@@ -1,0 +1,22 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "humidity": {
+      "type": "number"
+    },
+    "Light": {
+      "type": "number"
+    },
+    "temperature": {
+      "operation": {
+        "transform": {
+          "expression": "(($.temperature)"
+        }
+      },
+      "type": "number"
+    },
+    "place": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+#["divice1"].publishMsg("matrix","HAPPY")
+#["divice1"].publishMsg("matrix","HEART")
