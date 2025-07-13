@@ -24,7 +24,7 @@ void loop() {
        )
     */
     for(int i = 0;i < 9;i++){
-      delay(150);y
+      delay(150);
       displaysegment(i,0,1);
     } 
 }
